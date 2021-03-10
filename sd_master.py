@@ -10,13 +10,32 @@ server = SimpleXMLRPCServer(
     logRequests=True,
 )
 
+def createWorker():
+    return "Create worker"
 
-# Expose a function
-def command(cmd):
-    return str(cmd)
+server.register_function(createWorker)
+
+def deleteWorker():
+    return "Delete worker"
+
+server.register_function(deleteWorker)
+
+def listWorker():
+    return "List worker"
+
+server.register_function(listWorker)
+
+def runWordCount():
+    return "Run word count"
+
+server.register_function(runWordCount)
+
+def runCountWords():
+    return "Run count words"
+
+server.register_function(runCountWords)
 
 
-server.register_function(command)
 
 # Start the server
 try:
