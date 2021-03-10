@@ -38,7 +38,7 @@ def wordCount(fileName):
 
     return cadena
     
-####################
+################################
 words = countingWords('test.txt')
 print(words)
 
