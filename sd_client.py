@@ -2,7 +2,6 @@ import xmlrpc.client
 import sys
 
 proxy = xmlrpc.client.ServerProxy('http://localhost:9000')
-#print(proxy.command('file1.txt, file2.txt'))
 
 arguments = sys.argv
 
@@ -19,8 +18,10 @@ if "worker" in arguments:
 
 if "job" in arguments:
         if arguments[2] in "run-wordcount":
-            print(proxy.runWordCount())
+            nameFiles = arguments[3]
+            print(proxy.runWordCount(nameFiles))
 
         if arguments[2] in "run-countwords":
-            print(proxy.runCountWords())           
+            nameFiles = arguments[3]
+            print(proxy.runCountWords(nameFiles))           
 

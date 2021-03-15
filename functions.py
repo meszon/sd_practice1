@@ -1,4 +1,6 @@
-#File with functions
+# File with functions
+
+# Counting words function
 def countingWords(fileName):
     totalWords = 0
     file = open(fileName, 'r')
@@ -7,7 +9,6 @@ def countingWords(fileName):
             totalWords = totalWords + len(line.split(" "))
     
     return totalWords
-
 
 def tractarString(fileTxt):
     fileTxt = fileTxt.replace("\n","")
@@ -24,6 +25,7 @@ def tractarString(fileTxt):
     fileTxt = fileTxt.lower()
     return fileTxt
 
+# Word count function
 def wordCount(fileName):
     file = open(fileName, 'r')
     lines = tractarString(file.read()).split(" ")
@@ -39,8 +41,8 @@ def wordCount(fileName):
     return cadena
     
 ################################
-words = countingWords('test.txt')
-print(words)
+#words = countingWords('test.txt')
+#print(words)
 
-words = wordCount('test.txt')
-print(words)
+#words = wordCount('test.txt')
+#print(words)
