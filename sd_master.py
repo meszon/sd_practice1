@@ -4,6 +4,8 @@ import functions
 import logging
 import redis
 import os
+import json
+
 
 # Workers
 workers = {}
@@ -39,9 +41,10 @@ def createWorker():
 
 server.register_function(createWorker)
 
-# Print proc example
+# Start worker
 def startWorker(id):
     global workers
+
     print(str(id))
 
 # Delete worker
@@ -67,21 +70,29 @@ server.register_function(listWorker)
 # Name files adaptation
 def nameFilesArray(nameFiles, typeTask):
     global taskNumber
-    task='task'+str(taskNumber)+'-'+str(typeTask)
-    taskNumber+=1
-    print(str(task))
+ 
     
     nameFiles = nameFiles.replace("[", "")
     nameFiles = nameFiles.replace("]", "")
 
-    if "," in nameFiles:
-        arrayFiles = nameFiles.split(",")
-        print(str(arrayFiles))
-        #r.set(str(task), list(arrayFiles))
-    else:
-        print(str(nameFiles))
-        #r.set(str(task), str(nameFiles))
+    arrayFiles = nameFiles.split(",")
+    for i in arrayFiles:
+        print("i: "+ str(i))
+        task='task' + str(taskNumber)
+        body=task + ';' + str(typeTask) + ';P;' + str(i)
+        r.set (str(task), str(body))
+        r.rpush('queue:pending', json.dumps(task))
+        taskNumber+=1
     
+    task='task' + str(taskNumber)
+    body=task + ';' + str(typeTask) + ';R'
+    r.set (str(task), str(body))
+    taskNumber+=1
+    r.rpush('queue:results', json.dumps(task))
+    result = r.blpop(['queue:tasks'], 30)
+    print(str(result))
+ 
+ 
 
 # Word Count
 def runWordCount(nameFiles):

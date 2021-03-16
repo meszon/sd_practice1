@@ -1,6 +1,8 @@
 import xmlrpc.client
 import sys
 
+#python3 client.py job run-worddcount [fitxer1, fitxer2]
+
 proxy = xmlrpc.client.ServerProxy('http://localhost:9000')
 
 arguments = sys.argv
