@@ -88,16 +88,14 @@ def runWordCount(nameFiles):
     nameFilesArray(nameFiles, "W")
     return str(nameFiles)
 
-# Count Words
 server.register_function(runWordCount)
 
+# Count Words
 def runCountWords(nameFiles):
     nameFilesArray(nameFiles, "C")
     return str(nameFiles)
 
 server.register_function(runCountWords)
-
-
 
 # Start the server
 try:
