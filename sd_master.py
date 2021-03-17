@@ -70,26 +70,27 @@ server.register_function(listWorker)
 # Name files adaptation
 def nameFilesArray(nameFiles, typeTask):
     global taskNumber
- 
-    
+    r.rpush('queue:tasks', json.dumps(""))
     nameFiles = nameFiles.replace("[", "")
     nameFiles = nameFiles.replace("]", "")
-
+    final_body=""
     arrayFiles = nameFiles.split(",")
     for i in arrayFiles:
         print("i: "+ str(i))
         task='task' + str(taskNumber)
         body=task + ';' + str(typeTask) + ';P;' + str(i)
         r.set (str(task), str(body))
-        r.rpush('queue:pending', json.dumps(task))
+        #r.rpushx('queue:tasks', json.dumps(final_body))
+        final_body = final_body + "-" + body
         taskNumber+=1
     
-    task='task' + str(taskNumber)
-    body=task + ';' + str(typeTask) + ';R'
-    r.set (str(task), str(body))
-    taskNumber+=1
-    r.rpush('queue:results', json.dumps(task))
-    result = r.blpop(['queue:tasks'], 30)
+    r.rpushx('queue:tasks', json.dumps(final_body))
+    #task='task' + str(taskNumber)
+    #body=task + ';' + str(typeTask) + ';R'
+    #r.set (str(task), str(body))
+    #taskNumber+=1
+    #r.rpush('queue:results', json.dumps(task))
+    result = r.blpop(['queue:tasks'], 3)
     print(str(result))
  
  
