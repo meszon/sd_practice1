@@ -50,12 +50,77 @@ def startWorker(id):
     while True:
         queue_list = r.lrange('queue:tasks', 1, -1)
         if queue_list:
-            #task = r.lindex('queue:tasks', 1)
-            #r.lrem('queue:tasks', 1, task)
-            #task = str(task).replace("b", "").replace("\'", "")
-            #print(task)
-            print(list(queue_list))
-            print(str(id))
+            task = r.lindex('queue:tasks', 1)
+            r.lrem('queue:tasks', 1, task)
+            task = str(task).replace("b", "").replace("\'", "")
+            print(task)
+            arrayTask = task.split(";")
+            if len(arrayTask) > 2:
+                if arrayTask[1] == "Wordcount":
+                    result = functions.wordCount(arrayTask[2])
+                
+                else:
+                    result = functions.countingWords(arrayTask[2])
+
+                #print(str(result))
+                task = arrayTask[0] + ":" + str(result)
+                #print(task)
+                r.rpushx('queue:results', task)
+
+
+            else:
+                    queue_result = r.lrange('queue:results', 1, -1)
+                    #print("result:" + str(queue_result))
+                    id_task = str(arrayTask[0])
+                    type_task = str(arrayTask[1])
+                    #print("id_task:"+id_task)
+                    i = 0
+                    pos = 0
+                    while i < len(queue_result):
+                        #print("queue:"+str(queue_result[i]))
+                        if id_task in str(queue_result[i]):
+                            #print("encontrado:"+str(id_task))
+                            pos = i + 1
+                            break
+                            
+                        i = i + 1
+
+                    result_task = r.lindex('queue:results', pos)
+                    r.lrem('queue:results', pos, result_task)
+                    #print(str(result_task))
+                    result_task = str(result_task).replace("b", "").replace("\'", "").split(":")
+                    #print("pos:"+str(pos))
+                    pending_tasks = str(result_task[1]).split(";")
+                    pending_tasks.remove(pending_tasks[-1])
+                    #if type_task == "CountWords":
+                    acc = 0
+                    
+                    for t in pending_tasks:
+                        print("t:"+str(t))
+                        j = 1
+                        pos = 0
+                        while j < len(queue_result):
+                            print("sf")
+                            if str(t) in str(queue_result[j]):
+                                pos = j
+                                split_task = r.lindex('queue:results', pos)
+                                #r.lrem('queue:results', pos, split_task)
+                                split_task = str(split_task).replace("b", "").replace("\'", "").split(":")
+                                print(str(type_task))
+                                if type_task == "Countwords":
+                                    acc = acc + int(split_task[1])
+                                    print(str(acc))
+
+                            j += 1
+                    
+                    print(str(acc))
+
+
+       
+                    #r.rpushx('queue:tasks', task)
+
+            #print(list(queue_list))
+            #print(str(id))
 
 # Delete worker
 def deleteWorker():
@@ -86,16 +151,16 @@ def nameFilesArray(nameFiles, typeTask):
     result_tasks = ""
 
     for i in arrayFiles:
-        print("i: "+ str(i))
+        #print("i: "+ str(i))
         task='task' + str(taskNumber)
         result_tasks = result_tasks + task + ";"
-        body=task + ';' + str(typeTask) + ';P;' + str(i)
+        body=task + ';' + str(typeTask) + ';' + str(i)
         r.rpushx('queue:tasks', body)
         taskNumber+=1
     
     task='task' + str(taskNumber)
     taskNumber+=1
-    body=task + ';' + str(typeTask) + ';P;'
+    body=task + ';' + str(typeTask)
     r.rpushx('queue:tasks', body)
     body_tasks = task + ":" + result_tasks
     r.rpushx('queue:results', body_tasks)
