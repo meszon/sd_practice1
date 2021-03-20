@@ -55,6 +55,7 @@ def startWorker(id):
             task = str(task).replace("b", "").replace("\'", "")
             print(task)
             arrayTask = task.split(";")
+            #tareas con archivos
             if len(arrayTask) > 2:
                 if arrayTask[1] == "Wordcount":
                     result = functions.wordCount(arrayTask[2])
@@ -62,57 +63,47 @@ def startWorker(id):
                 else:
                     result = functions.countingWords(arrayTask[2])
 
-                #print(str(result))
                 task = arrayTask[0] + ":" + str(result)
-                #print(task)
                 r.rpushx('queue:results', task)
 
-
+            #tareas que unen resultados
             else:
                     queue_result = r.lrange('queue:results', 1, -1)
-                    #print("result:" + str(queue_result))
-                    id_task = str(arrayTask[0])
+                    id_task = str(arrayTask[0]) #id tarea que une 
                     type_task = str(arrayTask[1])
-                    #print("id_task:"+id_task)
                     i = 0
                     pos = 0
                     while i < len(queue_result):
-                        #print("queue:"+str(queue_result[i]))
-                        if id_task in str(queue_result[i]):
-                            #print("encontrado:"+str(id_task))
-                            pos = i + 1
+                        if id_task in str(queue_result[i]): #obtenemos su posicion en la cola
+                            pos = i + 1                     #para borrarla y que otro worker no haga la misma tarea
                             break
                             
                         i = i + 1
 
                     result_task = r.lindex('queue:results', pos)
                     r.lrem('queue:results', pos, result_task)
-                    #print(str(result_task))
                     result_task = str(result_task).replace("b", "").replace("\'", "").split(":")
-                    #print("pos:"+str(pos))
-                    pending_tasks = str(result_task[1]).split(";")
+                    pending_tasks = str(result_task[1]).split(";")  #id de las tareas a unir (sus resultados)
                     pending_tasks.remove(pending_tasks[-1])
-                    #if type_task == "CountWords":
                     acc = 0
                     
                     for t in pending_tasks:
-                        print("t:"+str(t))
                         j = 1
                         pos = 0
                         while j < len(queue_result):
-                            print("sf")
                             if str(t) in str(queue_result[j]):
                                 pos = j
                                 split_task = r.lindex('queue:results', pos)
                                 #r.lrem('queue:results', pos, split_task)
                                 split_task = str(split_task).replace("b", "").replace("\'", "").split(":")
-                                print(str(type_task))
                                 if type_task == "Countwords":
                                     acc = acc + int(split_task[1])
                                     print(str(acc))
 
                             j += 1
                     
+
+
                     print(str(acc))
 
 
