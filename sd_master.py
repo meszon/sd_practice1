@@ -87,31 +87,47 @@ def startWorker(id):
                     pending_tasks.remove(pending_tasks[-1])
                     acc = 0
                     
+                    #buscamos sus tareas que debe unir
+                    list_pos_task_done = [] #lista con las tareas ya unidas
+                    freqWord = []
+                    cadena = ""
+                    text = ""
                     for t in pending_tasks:
                         j = 1
                         pos = 0
                         while j < len(queue_result):
                             if str(t) in str(queue_result[j]):
                                 pos = j
+                                list_pos_task_done.append(pos)
                                 split_task = r.lindex('queue:results', pos)
-                                #r.lrem('queue:results', pos, split_task)
+                                list_pos_task_done.append(split_task)
                                 split_task = str(split_task).replace("b", "").replace("\'", "").split(":")
                                 if type_task == "Countwords":
                                     acc = acc + int(split_task[1])
-                                    print(str(acc))
+                                else:
+                                    text = text + "".join([i for i in split_task[1] if not i.isdigit()])    #eliminamos los numeros     
 
-                            j += 1
+                            j = j + 1
+
+                    text = functions.tractarString(text) #eliminamos , ; y caracteres especiales
+                    text = text.replace("\n"," ")   #eliminamos el salto de linea
+                    print(text)
+                    lines = functions.tractarString(text).split("  ") # 2 espacios
+                    for word in lines:
+                        freqWord.append(lines.count(word))               
+                    for tupla in list(zip(lines,freqWord)):
+                        if tupla[0] not in cadena:      #mostamos cada palabra solo una vez
+                            cadena = cadena + tupla[0] + ", " + str(tupla[1]) + "; " 
+                    print(cadena)
                     
+                    #eliminamos tareas unidas (ya procesadas)
+                    l = 0
+                    while l < len(list_pos_task_done):
+                        r.lrem('queue:results', list_pos_task_done[l], list_pos_task_done[l+1])
+                        l = l + 2
 
 
-                    print(str(acc))
 
-
-       
-                    #r.rpushx('queue:tasks', task)
-
-            #print(list(queue_list))
-            #print(str(id))
 
 # Delete worker
 def deleteWorker():
