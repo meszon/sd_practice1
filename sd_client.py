@@ -1,7 +1,11 @@
 import xmlrpc.client
 import sys
-
-#python3 client.py job run-worddcount [fitxer1, fitxer2]
+###
+#   Raul Mesa - Victor Sentis
+#   SD 2021
+#   Script del cliente
+#   Ejemplo llamada: python3 client.py job run-worddcount [fitxer1, fitxer2]
+###
 
 proxy = xmlrpc.client.ServerProxy('http://localhost:9000')
 

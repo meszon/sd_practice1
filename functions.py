@@ -1,4 +1,9 @@
-# File with functions
+###
+#   Raul Mesa - Victor Sentis
+#   SD 2021
+#   Script del servidor
+#   File with functions
+###
 
 # Counting words function
 def countingWords(fileName):
@@ -40,9 +45,3 @@ def wordCount(fileName):
 
     return cadena
     
-################################
-#words = countingWords('test.txt')
-#print(words)
-
-#words = wordCount('test.txt')
-#print(words)

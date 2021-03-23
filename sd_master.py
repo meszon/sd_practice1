@@ -7,6 +7,11 @@ import redis
 import os
 import json
 
+###
+#   Raul Mesa - Victor Sentis
+#   SD 2021
+#   Script del servidor
+###
 
 # Workers
 workers = {}
@@ -26,6 +31,8 @@ server = SimpleXMLRPCServer(
 
 # Redis database connection
 r = redis.Redis(host='localhost', port=6379, db=0)
+
+# Create first element in queue
 r.rpush('queue:tasks', "")
 r.rpush('queue:results', "")
     
@@ -48,14 +55,14 @@ server.register_function(createWorker)
 def startWorker(id):
     global workers
     while True:
-        queue_list = r.lrange('queue:tasks', 1, -1)
+        queue_list = r.lrange('queue:tasks', 1, -1) # Guardar en una lista la queue
         if queue_list:
-            task = r.lindex('queue:tasks', 1)
-            r.lrem('queue:tasks', 1, task)
+            # Selecciona una tarea
+            task = r.lindex('queue:tasks', 1)   # Get de la posición 1
+            r.lrem('queue:tasks', 1, task)      # Eliminar la posición 1 de queue
             task = str(task).replace("b", "").replace("\'", "")
-            print(task)
             arrayTask = task.split(";")
-            #tareas con archivos
+            # Tareas con archivos / realizan una de las funciones
             if len(arrayTask) > 2:
                 if arrayTask[1] == "Wordcount":
                     result = functions.wordCount(arrayTask[2])
@@ -66,57 +73,58 @@ def startWorker(id):
                 task = arrayTask[0] + ":" + str(result)
                 r.rpushx('queue:results', task)
 
-            #tareas que unen resultados
+            # Tareas que unen resultados
             else:
+                    # Operamos con la segunda queue
                     queue_result = r.lrange('queue:results', 1, -1)
-                    id_task = str(arrayTask[0]) #id tarea que une 
+                    id_task = str(arrayTask[0]) # Id tarea que une 
                     type_task = str(arrayTask[1])
                     i = 0
                     pos = 0
                     while i < len(queue_result):
-                        if id_task in str(queue_result[i]): #obtenemos su posicion en la cola
-                            pos = i + 1                     #para borrarla y que otro worker no haga la misma tarea
+                        if id_task in str(queue_result[i]): # Obtenemos su posicion en la cola
+                            pos = i + 1                     # para borrarla y que otro worker no haga la misma tarea
                             break
                             
                         i = i + 1
 
+                    # Buscamos las tareas que debe unir
                     result_task = r.lindex('queue:results', pos)
                     r.lrem('queue:results', pos, result_task)
                     result_task = str(result_task).replace("b", "").replace("\'", "").split(":")
-                    pending_tasks = str(result_task[1]).split(";")  #id de las tareas a unir (sus resultados)
-                    pending_tasks.remove(pending_tasks[-1])
-                    acc = 0
+                    id_pending_tasks = str(result_task[1]).split(";")  # Id de las tareas a unir (sus resultados)
+                    id_pending_tasks.remove(id_pending_tasks[-1])
+                    acc = 0 # Acumulador
                     
-                    #buscamos sus tareas que debe unir
-                    list_pos_task_done = [] #lista con las tareas ya unidas
+                    # Buscamos los resultados que debe unir
+                    list_pos_task_done = [] # Lista con las tareas ya unidas
                     freqWord = []
                     cadena = ""
                     text = ""
-                    for t in pending_tasks:
+                    for t in id_pending_tasks:
                         j = 1
                         pos = 0
                         while j < len(queue_result):
                             if str(t) in str(queue_result[j]):
                                 pos = j
-                                list_pos_task_done.append(pos)
-                                split_task = r.lindex('queue:results', pos)
-                                list_pos_task_done.append(split_task)
-                                split_task = str(split_task).replace("b", "").replace("\'", "").split(":")
+                                list_pos_task_done.append(pos)      # Guardamos las posiciones
+                                result_pending_task = r.lindex('queue:results', pos)
+                                list_pos_task_done.append(result_pending_task)  # Guardamos el resultado
+                                result_pending_task = str(result_pending_task).replace("b", "").replace("\'", "").split(":")
                                 if type_task == "Countwords":
-                                    acc = acc + int(split_task[1])
+                                    acc = acc + int(result_pending_task[1])
                                 else:
-                                    text = text + "".join([i for i in split_task[1] if not i.isdigit()])    #eliminamos los numeros     
+                                    text = text + "".join([i for i in result_pending_task[1] if not i.isdigit()])    #eliminamos los numeros     
 
                             j = j + 1
 
-                    text = functions.tractarString(text) #eliminamos , ; y caracteres especiales
-                    text = text.replace("\n"," ")   #eliminamos el salto de linea
-                    print(text)
+                    text = functions.tractarString(text)    #eliminamos , ; y caracteres especiales
+                    text = text.replace("\n"," ")           #eliminamos el salto de linea
                     lines = functions.tractarString(text).split("  ") # 2 espacios
                     for word in lines:
                         freqWord.append(lines.count(word))               
                     for tupla in list(zip(lines,freqWord)):
-                        if tupla[0] not in cadena:      #mostamos cada palabra solo una vez
+                        if tupla[0] not in cadena:          #mostamos cada palabra solo una vez
                             cadena = cadena + tupla[0] + ", " + str(tupla[1]) + "; " 
                     print(cadena)
                     
@@ -125,7 +133,6 @@ def startWorker(id):
                     while l < len(list_pos_task_done):
                         r.lrem('queue:results', list_pos_task_done[l], list_pos_task_done[l+1])
                         l = l + 2
-
 
 
 
