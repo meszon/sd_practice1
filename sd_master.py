@@ -31,6 +31,7 @@ server = SimpleXMLRPCServer(
 
 # Redis database connection
 r = redis.Redis(host='localhost', port=6379, db=0)
+r.flushall
 
 # Create first element in queue
 r.rpush('queue:tasks', "")

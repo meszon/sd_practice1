@@ -18,7 +18,7 @@ def countingWords(fileName):
     for line in file:
         #if line != "\n":
         totalWords = totalWords + len(line.split(" "))
-    
+        
     return totalWords
 
 def tractarString(fileTxt):
