@@ -5,6 +5,9 @@ import sys
 #   SD 2021
 #   Script del cliente
 #   Ejemplo llamada: python3 client.py job run-wordcount [fitxer1, fitxer2]
+#   python3 sd_client.py worker create/delete
+#   redis-server 
+#   redis-cli
 ###
 
 proxy = xmlrpc.client.ServerProxy('http://localhost:9000')
