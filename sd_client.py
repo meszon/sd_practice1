@@ -4,7 +4,7 @@ import sys
 #   Raul Mesa - Victor Sentis
 #   SD 2021
 #   Script del cliente
-#   Ejemplo llamada: python3 client.py job run-wordcount [fitxer1, fitxer2]
+#   Ejemplo llamada: python3 sd_client.py job run-wordcount [fitxer1, fitxer2]
 #   python3 sd_client.py worker create/delete
 #   redis-server 
 #   redis-cli

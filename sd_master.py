@@ -119,15 +119,19 @@ def startWorker(id):
 
                             j = j + 1
 
-                    text = functions.tractarString(text)    #eliminamos , ; y caracteres especiales
-                    text = text.replace("\n"," ")           #eliminamos el salto de linea
-                    lines = functions.tractarString(text).split("  ") # 2 espacios
-                    for word in lines:
-                        freqWord.append(lines.count(word))               
-                    for tupla in list(zip(lines,freqWord)):
-                        if tupla[0] not in cadena:          #mostamos cada palabra solo una vez
-                            cadena = cadena + tupla[0] + ", " + str(tupla[1]) + "; " 
-                    print(cadena)
+                    if type_task == "Countwords":
+                        print(str(acc))
+
+                    else:
+                        text = functions.tractarString(text)    #eliminamos , ; y caracteres especiales
+                        text = text.replace("\n"," ")           #eliminamos el salto de linea
+                        lines = functions.tractarString(text).split("  ") # 2 espacios
+                        for word in lines:
+                            freqWord.append(lines.count(word))               
+                        for tupla in list(zip(lines,freqWord)):
+                            if tupla[0] not in cadena:          #mostamos cada palabra solo una vez
+                                cadena = cadena + tupla[0] + ", " + str(tupla[1]) + "; " 
+                        print(cadena)
                     
                     #eliminamos tareas unidas (ya procesadas)
                     l = 0
@@ -153,7 +157,7 @@ server.register_function(deleteWorker)
 
 # List worker
 def listWorker():
-    return "List worker"
+    return ("List worker:" + str(workers))
 
 server.register_function(listWorker)
 
