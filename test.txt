@@ -1,3 +1,0 @@
-In this code, there is a function called main() that prints the phrase Hello World! when the Python interpreter executes it. There is also a conditional (or if) statement that checks the value of name and compares it to the string main. When the if statement evaluates to True, the Python interpreter executes main(). You can read more about conditional statements in Conditional Statements in Python.
-
-This code pattern is quite common in Python files that you want to be executed as a script and imported in another module. To help understand how this code will execute, you should first understand how the Python interpreter sets name depending on how the code is being executed.

@@ -2,10 +2,10 @@ from xmlrpc.server import SimpleXMLRPCServer
 from multiprocessing import Process
 import functions
 import logging
-import time
+#import time
 import redis
-import os
-import json
+#import os
+#import json
 
 ###
 #   Raul Mesa - Victor Sentis
@@ -47,7 +47,6 @@ def createWorker():
     workers[worker_id] = proc
     worker_id += 1
 
-    #return "Create worker"
     return str(proc)
 
 server.register_function(createWorker)
@@ -170,7 +169,6 @@ def nameFilesArray(nameFiles, typeTask):
     result_tasks = ""
 
     for i in arrayFiles:
-        #print("i: "+ str(i))
         task='task' + str(taskNumber)
         result_tasks = result_tasks + task + ";"
         body=task + ';' + str(typeTask) + ';' + str(i)

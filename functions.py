@@ -13,16 +13,14 @@ def countingWords(fileName):
     totalWords = 0
     file = requests.get(fileName)
     file = file.text.splitlines()
-    #file = open(fileName, 'r')
-    #for line in file.readlines():
+    
     for line in file:
-        #if line != "\n":
         totalWords = totalWords + len(line.split(" "))
         
     return totalWords
 
 def tractarString(fileTxt):
-    fileTxt = fileTxt.replace("\n","")
+    fileTxt = fileTxt.replace("\n"," ")
     fileTxt = fileTxt.replace(",","")
     fileTxt = fileTxt.replace(".","")
     fileTxt = fileTxt.replace(";","")
@@ -33,6 +31,7 @@ def tractarString(fileTxt):
     fileTxt = fileTxt.replace("¿","")
     fileTxt = fileTxt.replace("!","")
     fileTxt = fileTxt.replace("¡","")
+    fileTxt = fileTxt.replace(":","")
     fileTxt = fileTxt.lower()
     return fileTxt
 
@@ -40,8 +39,6 @@ def tractarString(fileTxt):
 def wordCount(fileName):
 
     file = requests.get(fileName)
-    #file = open(fileName, 'r')
-    #lines = tractarString(file.read()).split(" ")
     lines = tractarString(file.text).split(" ")
 
     freqWord = []
@@ -50,8 +47,8 @@ def wordCount(fileName):
     
     cadena = ""
     for tupla in list(zip(lines,freqWord)):
-        cadena = cadena + tupla[0] + ", " + str(tupla[1]) + "; " 
-    print(cadena)
+        if tupla[0] != " ":
+            cadena = cadena + tupla[0] + ", " + str(tupla[1]) + "; " 
 
     return cadena
     
