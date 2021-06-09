@@ -63,6 +63,7 @@ conjunto de tareas a consultar.
 Hemos creado unos archivos simples para las pruebas. Estos contienen:
 - fichero1: hola que tal
 - fichero2: hola que hace usted
+
 Prueba creando el worker primero:
 	● Creamos un worker.
 	● Ejecutamos countword con fichero1 y fichero2 por separado.
