@@ -65,41 +65,41 @@ Hemos creado unos archivos simples para las pruebas. Estos contienen:
 - fichero2: hola que hace usted
 
 Prueba creando el worker primero:
-	● Creamos un worker.
-	● Ejecutamos countword con fichero1 y fichero2 por separado.
-		Resultados: 3 y 4 ✔️
-	● Ejecutamos wordcount con fichero1 y fichero2 por separado.
-		Resultados: hola, 1; que, 1; tal, 1; y hola, 1; que, 1; hace, 1; usted, 1; ✔️
-	● Ejecutamos countword con ambos archivos en la llamada.
-		Resultado: 7 ✔️
-	● Ejecutamos wordcount con ambos archivos en la llamada.
-	Resultado: hola, 2; que, 2; tal, 1; hace, 1; usted, 1; ✔️
+● Creamos un worker.
+● Ejecutamos countword con fichero1 y fichero2 por separado.
+Resultados: 3 y 4 ✔️
+● Ejecutamos wordcount con fichero1 y fichero2 por separado.
+Resultados: hola, 1; que, 1; tal, 1; y hola, 1; que, 1; hace, 1; usted, 1; ✔️
+● Ejecutamos countword con ambos archivos en la llamada.
+Resultado: 7 ✔️
+● Ejecutamos wordcount con ambos archivos en la llamada.
+Resultado: hola, 2; que, 2; tal, 1; hace, 1; usted, 1; ✔️
 
 Prueba creando las tareas primero:
-	● Ejecutamos countword con fichero1 y fichero2 por separado.
-	● Ejecutamos wordcount con fichero1 y fichero2 por separado.
-	● Ejecutamos countword con ambos archivos en la llamada.
-	● Ejecutamos wordcount con ambos archivos en la llamada.
-	● Creamos un worker.
-		Resultados: 3 y 4 ✔️
-		Resultados: hola, 1; que, 1; tal, 1; y hola, 1; que, 1; hace, 1; usted, 1; ✔️
-		Resultado: 7 ✔️
-		Resultado: hola, 2; que, 2; tal, 1; hace, 1; usted, 1; ✔️
+● Ejecutamos countword con fichero1 y fichero2 por separado.
+● Ejecutamos wordcount con fichero1 y fichero2 por separado.
+● Ejecutamos countword con ambos archivos en la llamada.
+● Ejecutamos wordcount con ambos archivos en la llamada.
+● Creamos un worker.
+Resultados: 3 y 4 ✔️
+Resultados: hola, 1; que, 1; tal, 1; y hola, 1; que, 1; hace, 1; usted, 1; ✔️
+Resultado: 7 ✔️
+Resultado: hola, 2; que, 2; tal, 1; hace, 1; usted, 1; ✔️
 Prueba con varios workers:
-	● Creamos dos workers.
-	● Ejecutamos countword con fichero1 una vez.
-		Resultado 1: 6
-		Resultado 2: 3 ✔️
-		Resultado 3: 3 ✔️
-	● Ejecutamos wordcount con fichero1 una vez.
-		Resultado 1: hola, 2; que, 2; tal, 2; hola, 2; que, 2; tal, 2;
-		Resultado 2: hola, 1; que, 1; tal, 1; ✔️
-		Resultado 3: hola, 1; que, 1; tal, 1; ✔️
-	● Ejecutamos countword con fichero1 dos veces.
-		Resultado: 6 ✔️
-		Resultado: 6 ✔️
-		Resultado: 6 ✔️
-	● Ejecutamos wordcount con fichero1 dos veces.
-		Resultado 1: hola, 2; que, 2; tal, 2; ✔️
-		Resultado 2: hola, 2; que, 2; tal, 2; ✔️
-		Resultado 3: hola, 2; que, 2; tal, 2; ✔
+● Creamos dos workers.
+● Ejecutamos countword con fichero1 una vez.
+Resultado 1: 6
+Resultado 2: 3 ✔️
+Resultado 3: 3 ✔️
+● Ejecutamos wordcount con fichero1 una vez.
+Resultado 1: hola, 2; que, 2; tal, 2; hola, 2; que, 2; tal, 2;
+Resultado 2: hola, 1; que, 1; tal, 1; ✔️
+Resultado 3: hola, 1; que, 1; tal, 1; ✔️
+● Ejecutamos countword con fichero1 dos veces.
+Resultado: 6 ✔️
+Resultado: 6 ✔️
+Resultado: 6 ✔️
+● Ejecutamos wordcount con fichero1 dos veces.
+Resultado 1: hola, 2; que, 2; tal, 2; ✔️
+Resultado 2: hola, 2; que, 2; tal, 2; ✔️
+Resultado 3: hola, 2; que, 2; tal, 2; ✔
